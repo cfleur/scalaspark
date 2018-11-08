@@ -28,6 +28,7 @@ class AirTrafficProcessor(spark: SparkSession,
     filePath:String, airportsPath: String, carriersPath: String) {
 
     import spark.implicits._
+//    import sqlContext.implicits._
 
     /**
     * Table names for SQL
@@ -125,31 +126,32 @@ class AirTrafficProcessor(spark: SparkSession,
         return data
     }
 
-//    //USE can use SPARK SQL or DataFrame transformations
-//
-//    /** Gets the number of flights for each
-//    * airplane. 'TailNum' column is unique for each
-//    * airplane so it should be used. DataFrame should
-//    * also be sorted by count in descending order.
-//    *
-//    * Result looks like:
-//    *   +-------+-----+
-//    *   |TailNum|count|
-//    *   +-------+-----+
-//    *   | N635SW| 2305|
-//    *   | N11150| 1342|
-//    *   | N572UA| 1176|
-//    *   | N121UA|    8|
-//    *   +-------+-----+
-//    *
-//    * @param df Air traffic data
-//    * @return DataFrame containing number of flights per
-//    * TailNum. DataFrame is sorted by count. Column names
-//    * are TailNum and count
-//    */
-//    def flightCount(df: DataFrame): DataFrame = {
-//        ???
-//    }
+    //USE can use SPARK SQL or DataFrame transformations
+
+    /** Gets the number of flights for each
+    * airplane. 'TailNum' column is unique for each
+    * airplane so it should be used. DataFrame should
+    * also be sorted by count in descending order.
+    *
+    * Result looks like:
+    *   +-------+-----+
+    *   |TailNum|count|
+    *   +-------+-----+
+    *   | N635SW| 2305|
+    *   | N11150| 1342|
+    *   | N572UA| 1176|
+    *   | N121UA|    8|
+    *   +-------+-----+
+    *
+    * @param df Air traffic data
+    * @return DataFrame containing number of flights per
+    * TailNum. DataFrame is sorted by count. Column names
+    * are TailNum and count
+    */
+    def flightCount(df: DataFrame): DataFrame = {
+        val countPlanes = df.groupBy("TailNum").count().sort($"count".desc_nulls_last)
+        return countPlanes
+    }
 //
 //
 //    /** Which flights were cancelled due to

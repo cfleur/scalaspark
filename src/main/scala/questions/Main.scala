@@ -27,8 +27,8 @@ object Main {
     val processor = new AirTrafficProcessor(spark, filePath, airportsPath, carriersPath)
     val data = processor.loadDataAndRegister(filePath)
 
-    //println(data.schema)
-    //data.collect().foreach(println)
+    println(data.schema)
+//    data.collect().foreach(println)
     // println("<<<security>>>")
     // processor.cancelledDueToSecurity().show()
     // println("<<<weather dealy>>>")

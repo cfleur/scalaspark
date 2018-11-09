@@ -6,14 +6,15 @@ to download data:
 `sbt download`
 
 interactive scala console:
-`stb consone`
+`sbt console`
 
 start spark context:
 `val spark = org.apache.spark.sql.SparkSession.builder.master("local[*]").appName("main").getOrCreate()`
+`import spark.implicits._`
 
 make table:
 `val airTraffic = "airtraffic"`
-`val airtrafficTable = spark.read.option("header","true").option("inferSchema", "true").option("nullValue", "NA").csv("/Users/cathy/Desktop/Big-Data-Platforms/a2/dataframe/src/main/resources/2008.csv");airtrafficTable.createOrReplaceTempView(airTraffic)`
+`val airTrafficTable = spark.read.option("header","true").option("inferSchema", "true").option("nullValue", "NA").csv("LOCATION/src/main/resources/2008.csv ");airTrafficTable.createOrReplaceTempView(airTraffic)`
 
 stop spark:
 `spark.stop()`

@@ -54,13 +54,6 @@ class AirTrafficProcessor(spark: SparkSession,
         .csv(airportsPath)
     airportsTable.createOrReplaceTempView(airports)
 
-//    val airTrafficTable = spark.read
-//      .option("header","true")
-//      .option("inferSchema", "true")
-//      .option("nullValue", "NA")
-//      .csv(filePath)
-//    airTrafficTable.createOrReplaceTempView(airTraffic)
-
     /** load the data and register it as a table
     * so that we can use it later for spark SQL.
     * File is in csv format, so we are using
@@ -121,7 +114,11 @@ class AirTrafficProcessor(spark: SparkSession,
     * @return created DataFrame with correct column types.
     */
     def loadDataAndRegister(path: String): DataFrame = {
-        val data = spark.read.option("header","true").option("inferSchema", "true").option("nullValue", "NA").csv(path)
+        val data = spark.read
+          .option("header","true")
+          .option("inferSchema", "true")
+          .option("nullValue", "NA")
+          .csv(path)
         data.createOrReplaceTempView(airTraffic)
         return data
     }
@@ -152,29 +149,31 @@ class AirTrafficProcessor(spark: SparkSession,
         val countPlanes = df.groupBy("TailNum").count().sort($"count".desc_nulls_last)
         return countPlanes
     }
-//
-//
-//    /** Which flights were cancelled due to
-//    * security reasons the most?
-//    *
-//    * Example output:
-//    * +---------+----+
-//    * |FlightNum|Dest|
-//    * +---------+----+
-//    * |     4285| DHN|
-//    * |     4790| ATL|
-//    * |     3631| LEX|
-//    * |     3632| DFW|
-//    * +---------+----+
-//    *
-//    * @return Returns a DataFrame containing flights which were
-//    * cancelled due to security reasons (CancellationCode = 'D').
-//    * Columns FlightNum and Dest are included.
-//    */
-//    def cancelledDueToSecurity(df: DataFrame): DataFrame = {
-//        ???
-//    }
-//
+
+
+    /** Which flights were cancelled due to
+    * security reasons the most?
+    *
+    * Example output:
+    * +---------+----+
+    * |FlightNum|Dest|
+    * +---------+----+
+    * |     4285| DHN|
+    * |     4790| ATL|
+    * |     3631| LEX|
+    * |     3632| DFW|
+    * +---------+----+
+    *
+    * @return Returns a DataFrame containing flights which were
+    * cancelled due to security reasons (CancellationCode = 'D').
+    * Columns FlightNum and Dest are included.
+    */
+    def cancelledDueToSecurity(df: DataFrame): DataFrame = {
+        val cancelledSecurity = spark
+          .sql("SELECT FlightNum, Dest, FROM airTraffic WHERE CancellationCode = 'D'")
+        return cancelledSecurity
+    }
+
 //    /** What was the longest weather delay between January
 //    * and march (1.1-31.3)?
 //    *
